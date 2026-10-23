@@ -1,2 +1,5 @@
+/root/springboot-aws-delpoy/src/main/java/com/example/springbootawsdeploy/SecurityConfig.java
 /root/springboot-aws-delpoy/src/main/java/com/example/springbootawsdeploy/TestController.java
+/root/springboot-aws-delpoy/src/main/java/com/example/springbootawsdeploy/User.java
+/root/springboot-aws-delpoy/src/main/java/com/example/springbootawsdeploy/UserRepository.java
 /root/springboot-aws-delpoy/src/main/java/com/example/springbootawsdeploy/SpringbootAwsDeployApplication.java

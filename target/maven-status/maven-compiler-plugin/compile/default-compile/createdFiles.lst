@@ -1,2 +1,5 @@
 com/example/springbootawsdeploy/TestController.class
 com/example/springbootawsdeploy/SpringbootAwsDeployApplication.class
+com/example/springbootawsdeploy/UserRepository.class
+com/example/springbootawsdeploy/SecurityConfig.class
+com/example/springbootawsdeploy/User.class
