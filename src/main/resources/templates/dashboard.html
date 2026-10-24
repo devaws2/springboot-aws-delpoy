@@ -2,39 +2,49 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>SecureLife - Policyholder Dashboard</title>
+    <title>SecureLife Insurance Portal</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; }
-        .navbar { background: #004d40; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: #004d40; color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .header h2 { margin: 0; }
+        .logout-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; }
+        .logout-btn:hover { background: #b71c1c; }
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .welcome-card { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 24px; }
-        .policy-card { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .badge { background: #e8f5e9; color: #2e7d32; padding: 4px 12px; border-radius: 12px; font-weight: bold; font-size: 12px; }
-        .logout-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 14px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card h3 { margin-top: 0; color: #004d40; }
+        .details { margin-top: 15px; font-size: 16px; color: #333; line-height: 1.8; }
+        .details b { color: #004d40; }
+        .status-active { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 3px 8px; border-radius: 4px; }
     </style>
 </head>
 <body>
-<div class="navbar">
-    <h2>SecureLife Insurance Portal</h2>
-    <form th:action="@{/logout}" method="post" style="margin: 0;">
-        <button type="submit" class="logout-btn">Log Out</button>
-    </form>
-</div>
 
-<div class="container">
-    <div class="welcome-card">
-        <h3>Welcome back, <span th:text="${fullName}">User</span>!</h3>
-        <p>Username: <strong th:text="${email}">sakthi</strong></p>
+    <div class="header">
+        <h2>SecureLife Insurance Portal</h2>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="logout-btn">Log Out</button>
+        </form>
     </div>
 
-    <div class="policy-card">
-        <h3>Active Policy Overview</h3>
-        <hr>
-        <p><strong>Policy Number:</strong> <span th:text="${policyNumber}">POL-000000</span></p>
-        <p><strong>Status:</strong> <span class="badge">ACTIVE</span></p>
-        <p><strong>Coverage Type:</strong> Comprehensive Health & Life</p>
-        <p><strong>Coverage Amount:</strong> $500,000</p>
+    <div class="container">
+        <!-- Welcome Card -->
+        <div class="card">
+            <h3>Welcome back, <span th:text="${username}">Sakthivel</span>!</h3>
+            <p style="margin: 5px 0 0 0; color: #555;">Username: <b th:text="${username}">sakhi</b></p>
+        </div>
+
+        <!-- Active Policy Overview Card -->
+        <div class="card">
+            <h3>Active Policy Overview</h3>
+            <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 15px;">
+            <div class="details">
+                <p><b>Policy Number:</b> <span th:text="${policyNumber}">POL-99482103</span></p>
+                <p><b>Status:</b> <span class="status-active" th:text="${status}">ACTIVE</span></p>
+                <p><b>Coverage Type:</b> <span th:text="${coverageType}">Comprehensive Health & Life</span></p>
+                <p><b>Coverage Amount:</b> <span th:text="${coverageAmount}">$500,000</span></p>
+            </div>
+        </div>
     </div>
-</div>
+
 </body>
 </html>

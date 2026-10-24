@@ -1,44 +1,33 @@
 package com.example.springbootawsdeploy;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
+
 @Controller
 public class TestController {
 
-    // Seed dummy user data into H2 database on startup to prevent 500 errors
-    @Bean
-    CommandLineRunner initDatabase(UserRepository userRepository) {
-        return args -> {
-            if (userRepository.findByUsername("sakthi").isEmpty()) {
-                User user = new User();
-                user.setUsername("sakthi");
-                user.setFullName("Sakthivel");
-                user.setPolicyNumber("LIC-987654321");
-                userRepository.save(user);
-            }
-        };
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/login")
-    public String loginPage() {
-        return "login";
+    public String login() {
+        return "login"; // Renders login.html
     }
 
-    @GetMapping({"/", "/demo/data", "/dashboard"})
-    public String dashboard(@AuthenticationPrincipal UserDetails userDetails, Model model, UserRepository userRepository) {
-        if (userDetails != null) {
-            userRepository.findByUsername(userDetails.getUsername()).ifPresent(user -> {
-                model.addAttribute("fullName", user.getFullName());
-                model.addAttribute("policyNumber", user.getPolicyNumber());
-                model.addAttribute("email", user.getUsername());
-            });
-        }
-        return "dashboard";
+    @GetMapping("/dashboard")
+    public String dashboard(Model model, Principal principal) {
+        String username = (principal != null) ? principal.getName() : "Sakthivel";
+        
+        model.addAttribute("username", username);
+        model.addAttribute("policyNumber", "POL-99482103");
+        model.addAttribute("status", "ACTIVE");
+        model.addAttribute("coverageType", "Comprehensive Health & Life");
+        model.addAttribute("coverageAmount", "$500,000");
+
+        return "dashboard"; // Renders dashboard.html
     }
 }

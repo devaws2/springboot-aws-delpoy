@@ -1,6 +1,5 @@
 package com.example.springbootawsdeploy;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,22 +19,21 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return username -> {
-            User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            return org.springframework.security.core.userdetails.User
-                    .withUsername(user.getUsername())
-                    .password(user.getPassword())
-                    .roles("USER")
-                    .build();
-        };
+        return username -> userRepository.findByUsername(username)
+                .map(user -> org.springframework.security.core.userdetails.User.builder()
+                        .username(user.getUsername())
+                        .password(user.getPassword())
+                        .roles("USER")
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/h2-console/**").permitAll()
+                .requestMatchers("/login", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -46,26 +44,8 @@ public class SecurityConfig {
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
-            )
-            .csrf(csrf -> csrf.disable()) // Disabled for simplicity/H2 console
-            .headers(headers -> headers.frameOptions(frame -> frame.disable()));
+            );
 
         return http.build();
-    }
-
-    // Insert your custom credentials into the database on startup
-    @Bean
-    public CommandLineRunner initDatabase(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        return args -> {
-            if (userRepository.findByUsername("sakthi").isEmpty()) {
-                User defaultUser = new User(
-                        "sakthi",
-                        passwordEncoder.encode("aws@123"),
-                        "Sakthivel",
-                        "POL-99482103"
-                );
-                userRepository.save(defaultUser);
-            }
-        };
     }
 }
